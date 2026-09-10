@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema de Pesagem</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">⚖️ Sistema de Pesagem</div>
+
+        <div class="menu">
+            <a href="index.html">⚖️ Nova Pesagem</a>
+            <a href="clientes.html">👥 Clientes</a>
+        </div>
+    
+        <div class="status">🟢 Sistema Online</div>
+
+    </header>
+
+
+    <main>
+
+        <!-- ========================================= -->
+        <!-- NOVA PESAGEM -->
+        <!-- ========================================= -->
+
+        <section class="container">
+
+            <h1>Nova Pesagem</h1>
+
+            <div class="ticket-info">
+
+                <strong>Próximo Ticket:</strong>
+
+                <span id="ticketPreview">
+                    Será gerado automaticamente
+                </span>
+
+            </div>
+
+
+            <form id="pesagemForm">
+
+
+                <!-- ================================= -->
+                <!-- DADOS DO CLIENTE -->
+                <!-- ================================= -->
+
+                <div class="secao">
+
+                    <h2>👤 Dados do Cliente</h2>
+
+                    <div class="grid">
+
+
+                        <!-- CLIENTE -->
+
+                        <div class="campo grande">
+
+                            <label for="cliente">
+                                Cliente *
+                            </label>
+
+                            <div style="display: flex; gap: 10px;">
+
+                                <select
+                                    id="cliente"
+                                    required
+                                    style="flex: 1;"
+                                >
+
+                                    <option value="">
+                                        Selecione um cliente
+                                    </option>
+
+                                </select>
+
+                                <button
+                                    type="button"
+                                    id="btnNovoCliente"
+                                    class="btn salvar"
+                                >
+                                    ➕ Novo Cliente
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TRANSPORTADORA -->
+
+                        <div class="campo">
+
+                            <label for="transportadora">
+                                Transportadora
+                            </label>
+
+                            <input
+                                type="text"
+                                id="transportadora"
+                                readonly
+                            >
+
+                        </div>
+
+
+                        <!-- PLACA -->
+
+                        <div class="campo">
+
+                            <label for="placa">
+                                Placa do Caminhão *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="placa"
+                                readonly
+                            >
+
+                        </div>
+
+
+                        <!-- TELEFONE -->
+
+                        <div class="campo">
+
+                            <label for="telefone">
+                                Telefone
+                            </label>
+
+                            <input
+                                type="text"
+                                id="telefone"
+                                readonly
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PRODUTO -->
+                <!-- ================================= -->
+
+                <div class="secao">
+
+                    <h2>📦 Dados do Produto</h2>
+
+                    <div class="grid">
+
+
+                        <!-- DESCRIÇÃO -->
+
+                        <div class="campo grande">
+
+                            <label for="descricao">
+                                Descrição
+                            </label>
+
+                            <input
+                                type="text"
+                                id="descricao"
+                                placeholder="Ex.: PO BRANCO"
+                            >
+
+                        </div>
+
+
+                        <!-- QUANTIDADE -->
+
+                        <div class="campo">
+
+                            <label for="quantidade">
+                                Quantidade
+                            </label>
+
+                            <input
+                                type="text"
+                                id="quantidade"
+                                placeholder="Ex.: 28,10 - TN"
+                            >
+
+                        </div>
+
+
+                        <!-- VALOR DO PRODUTO -->
+
+                        <div class="campo">
+
+                            <label for="valorProduto">
+                                Vlr Total
+                            </label>
+
+                            <input
+                                type="number"
+                                id="valorProduto"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                            >
+
+                        </div>
+
+
+                        <!-- TOTAL DOS ITENS -->
+
+                        <div class="campo">
+
+                            <label for="totalItens">
+                                Total dos itens
+                            </label>
+
+                            <input
+                                type="number"
+                                id="totalItens"
+                                min="0"
+                                step="0.01"
+                                placeholder="1,00"
+                            >
+
+                        </div>
+
+
+                        <!-- QUANTIDADE TOTAL -->
+
+                        <div class="campo">
+
+                            <label for="quantidadeTotalItens">
+                                Qtde total de itens
+                            </label>
+
+                            <input
+                                type="number"
+                                id="quantidadeTotalItens"
+                                min="0"
+                                step="0.01"
+                                placeholder="1,00"
+                            >
+
+                        </div>
+
+
+                        <!-- VALOR TOTAL -->
+
+                        <div class="campo">
+
+                            <label for="valorTotal">
+                                Valor total R$
+                            </label>
+
+                            <input
+                                type="number"
+                                id="valorTotal"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                            >
+
+                        </div>
+
+
+                        <!-- DESCONTO -->
+
+                        <div class="campo">
+
+                            <label for="desconto">
+                                Desconto R$
+                            </label>
+
+                            <input
+                                type="number"
+                                id="desconto"
+                                min="0"
+                                step="0.01"
+                                value="0"
+                                placeholder="0,00"
+                            >
+
+                        </div>
+
+
+                        <!-- PAGAMENTO -->
+
+                        <div class="campo">
+
+                            <label for="pagamento">
+                                Pagamento
+                            </label>
+
+                            <select id="pagamento">
+
+                                <option value="">
+                                    Selecione
+                                </option>
+
+                                <option value="FATURA">
+                                    FATURA
+                                </option>
+
+                                <option value="PIX">
+                                    PIX
+                                </option>
+
+                                <option value="DINHEIRO">
+                                    DINHEIRO
+                                </option>
+
+                                <option value="CARTAO">
+                                    CARTÃO
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- VALOR A PAGAR -->
+
+                        <div class="campo">
+
+                            <label for="valorPagar">
+                                Valor a Pagar R$
+                            </label>
+
+                            <input
+                                type="number"
+                                id="valorPagar"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PESAGEM -->
+                <!-- ================================= -->
+
+                <div class="secao">
+
+                    <h2>⚖️ Pesagem</h2>
+
+                    <div class="pesos">
+
+
+                        <!-- TARA -->
+
+                        <div class="campo peso tara">
+
+                            <label for="tara">
+                                Tara (kg) *
+                            </label>
+
+                            <input
+                                type="number"
+                                id="tara"
+                                required
+                                min="0"
+                                step="0.001"
+                                placeholder="0.000"
+                            >
+
+                        </div>
+
+
+                        <!-- BRUTO -->
+
+                        <div class="campo peso bruto">
+
+                            <label for="pesoBruto">
+                                Peso Bruto (kg) *
+                            </label>
+
+                            <input
+                                type="number"
+                                id="pesoBruto"
+                                required
+                                min="0"
+                                step="0.001"
+                                placeholder="0.000"
+                            >
+
+                        </div>
+
+
+                        <!-- LÍQUIDO -->
+
+                        <div class="campo peso liquido">
+
+                            <label for="pesoLiquido">
+                                Peso Líquido (kg)
+                            </label>
+
+                            <input
+                                type="text"
+                                id="pesoLiquido"
+                                readonly
+                                value="0.000"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- NF-E -->
+                <!-- ================================= -->
+
+                <div class="secao">
+
+                    <h2>🧾 Nota Fiscal</h2>
+
+                    <div class="grid">
+
+                        <div class="campo">
+
+                            <label for="nfe">
+                                NF-E
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nfe"
+                                placeholder="Número da NF-E"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- BOTÕES -->
+                <!-- ================================= -->
+
+                <div class="botoes">
+
+                    <button
+                        type="button"
+                        id="btnLimpar"
+                        class="btn secundario"
+                    >
+                        🗑️ Limpar
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="btnSalvar"
+                        class="btn salvar"
+                    >
+                        💾 Salvar Pesagem
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="btnImprimir"
+                        class="btn imprimir"
+                    >
+                        🖨️ Imprimir Ticket
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+            <!-- ========================================= -->
+            <!-- CADASTRAR NOVO CLIENTE -->
+            <!-- ========================================= -->
+
+            <div
+                id="formNovoCliente"
+                style="
+                    display: none;
+                    margin-top: 20px;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    background: #f8f8f8;
+                "
+            >
+
+                <h2>➕ Cadastrar Novo Cliente</h2>
+
+                <div class="grid">
+
+
+                    <!-- NOME -->
+
+                    <div class="campo grande">
+
+                        <label for="novoClienteNome">
+                            Nome do Cliente *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="novoClienteNome"
+                            placeholder="Nome do cliente"
+                        >
+
+                    </div>
+
+
+                    <!-- TRANSPORTADORA -->
+
+                    <div class="campo">
+
+                        <label for="novoClienteTransportadora">
+                            Transportadora
+                        </label>
+
+                        <input
+                            type="text"
+                            id="novoClienteTransportadora"
+                            placeholder="Transportadora"
+                        >
+
+                    </div>
+
+
+                    <!-- PLACA -->
+
+                    <div class="campo">
+
+                        <label for="novoClientePlaca">
+                            Placa *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="novoClientePlaca"
+                            placeholder="ABC1D23"
+                        >
+
+                    </div>
+
+
+                    <!-- TELEFONE -->
+
+                    <div class="campo">
+
+                        <label for="novoClienteTelefone">
+                            Telefone
+                        </label>
+
+                        <input
+                            type="text"
+                            id="novoClienteTelefone"
+                            placeholder="(31) 99999-9999"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="botoes">
+
+                    <button
+                        type="button"
+                        id="btnCancelarCliente"
+                        class="btn secundario"
+                    >
+                        ❌ Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        id="btnCadastrarCliente"
+                        class="btn salvar"
+                    >
+                        💾 Cadastrar Cliente
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="mensagem"
+                class="mensagem"
+            ></div>
+
+
+        </section>
+
+
+        <!-- ========================================= -->
+        <!-- HISTÓRICO -->
+        <!-- ========================================= -->
+
+        <section class="container historico">
+
+            <h2>📋 Últimas Pesagens</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Ticket</th>
+                        <th>Cliente</th>
+                        <th>Placa</th>
+                        <th>Tara</th>
+                        <th>Bruto</th>
+                        <th>Líquido</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="tabelaPesagens">
+
+                    <tr>
+
+                        <td colspan="8">
+                            Carregando...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

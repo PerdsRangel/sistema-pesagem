@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clientes - Sistema de Pesagem</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚖️ Sistema de Pesagem</div>
+
+    <div class="menu">
+        <a href="index.html">⚖️ Nova Pesagem</a>
+        <a href="clientes.html">👥 Clientes</a>
+    </div>
+
+    <div class="status">🟢 Sistema Online</div>
+</header>
+
+
+<main>
+
+    <section class="container">
+
+        <div class="titulo-pagina">
+            <div>
+                <h1>👥 Gerenciamento de Clientes</h1>
+                <p>Cadastre, pesquise, edite ou exclua clientes.</p>
+            </div>
+
+            <button type="button" id="btnNovoCliente" class="btn salvar">
+                ➕ Novo Cliente
+            </button>
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+        <div id="formCliente"
+             style="
+                display: none;
+                margin-top: 20px;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                background: #f8f8f8;
+             ">
+
+            <h2 id="tituloFormulario">➕ Novo Cliente</h2>
+
+            <div class="grid">
+
+                <div class="campo grande">
+                    <label for="nome">Nome do Cliente *</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        placeholder="Nome do cliente"
+                    >
+                </div>
+
+
+                <div class="campo">
+                    <label for="transportadora">Transportadora</label>
+                    <input
+                        type="text"
+                        id="transportadora"
+                        placeholder="Transportadora"
+                    >
+                </div>
+
+
+                <div class="campo">
+                    <label for="placa">Placa *</label>
+                    <input
+                        type="text"
+                        id="placa"
+                        placeholder="ABC1D23"
+                    >
+                </div>
+
+
+                <div class="campo">
+                    <label for="telefone">Telefone</label>
+                    <input
+                        type="text"
+                        id="telefone"
+                        placeholder="(31) 99999-9999"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="botoes">
+
+                <button
+                    type="button"
+                    id="btnCancelar"
+                    class="btn secundario"
+                >
+                    ❌ Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    id="btnSalvar"
+                    class="btn salvar"
+                >
+                    💾 Salvar Cliente
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PESQUISA -->
+        <div style="margin-top: 30px;">
+
+            <label for="pesquisa">
+                🔎 Pesquisar cliente
+            </label>
+
+            <input
+                type="text"
+                id="pesquisa"
+                placeholder="Digite nome, placa ou transportadora..."
+                style="width: 100%; margin-top: 8px;"
+            >
+
+        </div>
+
+
+        <!-- TABELA -->
+        <div style="overflow-x: auto; margin-top: 20px;">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Transportadora</th>
+                        <th>Placa</th>
+                        <th>Telefone</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaClientes">
+
+                    <tr>
+                        <td colspan="6">
+                            Carregando clientes...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div id="mensagem" class="mensagem"></div>
+
+    </section>
+
+</main>
+
+
+<script src="clientes.js"></script>
+
+</body>
+</html>
