@@ -1,0 +1,25 @@
+# Ambiente virtual
+backend/venv/
+
+# Banco de dados
+backend/*.db
+backend/instance/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# PyInstaller
+backend/build/
+backend/dist/
+
+# Executáveis
+*.exe
+
+# VS Code
+.vscode/
+
+# Sistema
+Thumbs.db
+.DS_Store

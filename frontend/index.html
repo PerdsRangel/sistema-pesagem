@@ -40,15 +40,36 @@
 
             <h1>Nova Pesagem</h1>
 
-            <div class="ticket-info">
+        <div class="ticket-info">
 
-                <strong>Próximo Ticket:</strong>
+            <div class="campo">
+                <label for="ticket">
+                    Número do Ticket *
+                </label>
 
-                <span id="ticketPreview">
-                    Será gerado automaticamente
-                </span>
-
+                <input
+                    type="number"
+                    id="ticket"
+                    min="1"
+                    step="1"
+                    required
+                    placeholder="Ex.: 421853"
+                >
             </div>
+
+            <div class="campo">
+                <label for="horario">
+                    Horário *
+                </label>
+
+                <input
+                    type="time"
+                    id="horario"
+                    required
+                >
+            </div>
+
+        </div>
 
 
             <form id="pesagemForm">
@@ -128,7 +149,8 @@
                             <input
                                 type="text"
                                 id="placa"
-                                readonly
+                                required
+                                placeholder="ABC1D23"
                             >
 
                         </div>

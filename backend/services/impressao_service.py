@@ -50,8 +50,8 @@ NF-E: {pesagem.nfe or "-"}
 
 def gerar_ticket_escpos(pesagem):
     """
-    Gera os comandos ESC/POS do ticket
-    para a Elgin i9.
+    Gera o ticket ESC/POS para a Elgin i9.
+    Layout baseado no ticket de referência.
     """
 
     printer = Dummy()
@@ -62,284 +62,204 @@ def gerar_ticket_escpos(pesagem):
 
     printer.hw("init")
 
-
-    # =========================================
-    # CABEÇALHO
-    # =========================================
-
     printer.set(
         align="center",
         bold=True,
+        font="a",
+        width=1,
+        height=1
+    )
+
+    # =========================================
+    # TICKET / PLACA
+    # =========================================
+
+    printer.set(
+        bold=True,
+        align="center",
+        font="a",
         width=2,
         height=2
     )
 
     printer.text(
-        "TICKET DE PESAGEM\n"
-    )
-
-    printer.set(
-        align="center",
-        bold=True,
-        width=1,
-        height=1
+        f"Ticket: {pesagem.ticket}\n"
     )
 
     printer.text(
-        f"Nº {pesagem.ticket}\n"
+        f"Placa:  {pesagem.placa}\n"
     )
-
-    printer.text(
-        f"PLACA: {pesagem.placa}\n"
-    )
-
-    printer.text("\n")
 
     printer.set(
-        align="left",
-        bold=False
+        bold=False,
+        align="center"
     )
 
     printer.text(
         "----------------------------------------\n"
     )
 
-
     # =========================================
     # CLIENTE
     # =========================================
-
     printer.set(
-        align="left",
-        bold=True
+        bold=True,
+        align="center",
+        font="a"
     )
 
     printer.text(
-        "CLIENTE\n"
-    )
-
-    printer.set(
-        bold=False
+        f"Cliente: {pesagem.cliente}\n"
     )
 
     printer.text(
-        f"{pesagem.cliente}\n"
+        f"Transp.: {pesagem.transportadora or '-'}\n"
     )
 
     printer.text(
-        f"Transportadora: {pesagem.transportadora or '-'}\n"
-    )
-
-    printer.text(
-        f"Telefone: {pesagem.telefone or '-'}\n"
+        f"Tel.:    {pesagem.telefone or '-'}\n"
     )
 
     printer.text("\n")
-
 
     # =========================================
     # PRODUTO
     # =========================================
 
-    printer.set(
-        bold=True
+    printer.text(
+        "Desc.                  Quant.\n"
     )
 
     printer.text(
-        "PRODUTO\n"
-    )
-
-    printer.set(
-        bold=False
-    )
-
-    printer.text(
-        f"Descricao: {pesagem.descricao or '-'}\n"
-    )
-
-    printer.text(
-        f"Quantidade: {pesagem.quantidade or '-'}\n"
+        f"{pesagem.descricao or '-'}   "
+        f"{pesagem.quantidade or '-'}\n"
     )
 
     printer.text("\n")
-
 
     # =========================================
     # VALORES
     # =========================================
 
-    printer.set(
-        bold=True
+    printer.text(
+        "Vlr Total\n"
     )
 
     printer.text(
-        "VALORES\n"
-    )
-
-    printer.set(
-        bold=False
+        f"{pesagem.valor_produto or 0:.2f}\n"
     )
 
     printer.text(
-        f"Valor produto:      R$ {pesagem.valor_produto or 0:.2f}\n"
+        f"Total dos itens       "
+        f"{pesagem.total_itens or 0:.2f}\n"
     )
 
     printer.text(
-        f"Total dos itens:    R$ {pesagem.total_itens or 0:.2f}\n"
+        f"Qtde total de itens   "
+        f"{pesagem.quantidade_total_itens or 0:.2f}\n"
     )
 
     printer.text(
-        f"Qtd. total itens:      {pesagem.quantidade_total_itens or 0:.2f}\n"
+        f"Valor total R$        "
+        f"{pesagem.valor_total or 0:.2f}\n"
     )
 
     printer.text(
-        f"Valor total:        R$ {pesagem.valor_total or 0:.2f}\n"
+        f"Desconto R$           "
+        f"{pesagem.desconto or 0:.2f}\n"
     )
 
     printer.text(
-        f"Desconto:           R$ {pesagem.desconto or 0:.2f}\n"
-    )
-
-    printer.text(
-        f"Pagamento: {pesagem.pagamento or '-'}\n"
+        f"Pagto:                "
+        f"{pesagem.pagamento or '-'}\n"
     )
 
     printer.text("\n")
-
 
     # =========================================
     # VALOR A PAGAR
     # =========================================
 
     printer.set(
-        align="center",
         bold=True,
-        width=2,
-        height=2
+        align="center",
+        font="a"
     )
 
     printer.text(
-        f"R$ {pesagem.valor_pagar or 0:.2f}\n"
+        f"Valor a Pagar R$ "
+        f"{pesagem.valor_pagar or 0:.2f}\n"
     )
 
     printer.set(
-        align="center",
-        bold=True,
-        width=1,
-        height=1
+        bold=False,
+        align="center"
     )
 
     printer.text(
-        "VALOR A PAGAR\n"
+        "----------------------------------------\n"
     )
-
-    printer.text("\n")
-
 
     # =========================================
     # PESAGEM
     # =========================================
 
-    printer.set(
-        align="left",
-        bold=False
+    printer.text(
+        f"Tara:                 "
+        f"{pesagem.tara:.3f}\n"
     )
 
     printer.text(
-        "----------------------------------------\n"
+        f"Bruto:                "
+        f"{pesagem.peso_bruto:.3f}\n"
     )
 
     printer.set(
-        align="center",
-        bold=True
-    )
-
-    printer.text(
-        "PESAGEM\n"
-    )
-
-    printer.text("\n")
-
-
-    # Tara
-    printer.set(
-        bold=False
-    )
-
-    printer.text(
-        f"Tara:   {pesagem.tara:.3f} kg\n"
-    )
-
-    printer.text(
-        f"Bruto:  {pesagem.peso_bruto:.3f} kg\n"
-    )
-
-    printer.text("\n")
-
-
-    # =========================================
-    # PESO LÍQUIDO - DESTAQUE
-    # =========================================
-
-    printer.set(
-        align="center",
         bold=True,
-        width=2,
-        height=2
+        align="center",
+        font="a"
     )
 
     printer.text(
-        f"{pesagem.peso_liquido:.3f} kg\n"
+        f"Líquido:              "
+        f"{pesagem.peso_liquido:.3f}\n"
     )
 
     printer.set(
-        width=1,
-        height=1
-    )
-
-    printer.text(
-        "PESO LIQUIDO\n"
+        bold=False
     )
 
     printer.text("\n")
-
 
     # =========================================
     # DATAS
     # =========================================
 
-    printer.set(
-        align="left",
-        bold=False
+    data = pesagem.data.strftime(
+        "%d/%m/%Y"
     )
 
-    printer.text(
-        "----------------------------------------\n"
-    )
-
-    data = pesagem.data.strftime("%d/%m/%Y")
     data_completa = pesagem.data.strftime(
         "%d/%m/%Y %H:%M"
     )
 
     printer.text(
-        f"Data Entrada: {data}\n"
+        f"Data Ent.             {data}\n"
     )
 
     printer.text(
-        f"Data Saida:   {data}\n"
+        f"Data Saída.           {data}\n"
     )
 
     printer.text("\n")
 
-
-    # =========================================
-    # NF-E / DATA
-    # =========================================
-
-    printer.set(
-        bold=True
+    printer.text(
+        "----------------------------------------\n"
     )
+
+    # =========================================
+    # DATA / NF-E
+    # =========================================
 
     printer.text(
         f"DATA: {data_completa}\n"
@@ -349,27 +269,11 @@ def gerar_ticket_escpos(pesagem):
         f"NF-E: {pesagem.nfe or '-'}\n"
     )
 
-    printer.set(
-        bold=False
-    )
-
-    printer.text("\n\n")
-
+    printer.text("\n\n\n")
 
     # =========================================
     # FINAL
     # =========================================
-
-    printer.set(
-        align="center",
-        bold=True
-    )
-
-    printer.text(
-        "Obrigado!\n"
-    )
-
-    printer.text("\n\n\n")
 
     printer.cut()
 

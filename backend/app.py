@@ -1,5 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+from datetime import datetime
 from flask_cors import CORS
+import os
+import webbrowser
+import threading
+import sys
 
 from database import db
 from models.cliente import Cliente
@@ -14,9 +19,25 @@ from services.impressao_service import (
 
 app = Flask(__name__)
 
+if getattr(sys, "frozen", False):
+    FRONTEND_DIR = os.path.join(sys._MEIPASS, "frontend")
+else:
+    FRONTEND_DIR = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "frontend")
+    )
+
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pesagem.db"
+PASTA_DADOS = os.path.join(
+    os.environ.get("PUBLIC", r"C:\Users\Public"),
+    "SistemaPesagem"
+)
+
+os.makedirs(PASTA_DADOS, exist_ok=True)
+
+BANCO = os.path.join(PASTA_DADOS, "pesagem.db")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + BANCO
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
@@ -75,10 +96,11 @@ with app.app_context():
 
 @app.route("/")
 def home():
+    return send_from_directory(FRONTEND_DIR, "index.html")
 
-    return jsonify({
-        "mensagem": "Sistema de Pesagem funcionando!"
-    })
+@app.route("/<path:filename>")
+def frontend_files(filename):
+    return send_from_directory(FRONTEND_DIR, filename)
 
 
 # =========================================
@@ -190,6 +212,50 @@ def criar_pesagem():
     dados = request.get_json()
 
     # ======================================
+    # TICKET E HORÁRIO MANUAIS
+    # ======================================
+
+    ticket = dados.get("ticket")
+    horario = dados.get("horario")
+
+    # Validação do ticket
+    try:
+        ticket = int(ticket)
+    except (TypeError, ValueError):
+        return jsonify({
+            "erro": "Informe um número de ticket válido."
+        }), 400
+
+    if ticket <= 0:
+        return jsonify({
+            "erro": "O número do ticket deve ser maior que zero."
+        }), 400
+
+
+    # Validação do horário
+    if not horario:
+        return jsonify({
+            "erro": "Informe o horário da pesagem."
+        }), 400
+
+    try:
+        hora_manual = datetime.strptime(
+            horario,
+            "%H:%M"
+        ).time()
+
+    except ValueError:
+        return jsonify({
+            "erro": "Informe um horário válido."
+        }), 400
+
+
+    data_pesagem = datetime.combine(
+        datetime.now().date(),
+        hora_manual
+    )
+
+    # ======================================
     # DADOS DO CLIENTE
     # ======================================
 
@@ -276,22 +342,18 @@ def criar_pesagem():
         }), 400
 
     # ======================================
-    # PRÓXIMO TICKET
+    # VERIFICAR TICKET
     # ======================================
 
-    ultima_pesagem = Pesagem.query.order_by(
-        Pesagem.ticket.desc()
+    ticket_existente = Pesagem.query.filter_by(
+        ticket=ticket
     ).first()
 
-    if ultima_pesagem:
+    if ticket_existente:
 
-        novo_ticket = (
-            ultima_pesagem.ticket + 1
-        )
-
-    else:
-
-        novo_ticket = 1
+        return jsonify({
+            "erro": f"O ticket Nº {ticket} já existe."
+        }), 400
 
     # ======================================
     # CRIA PESAGEM
@@ -299,7 +361,7 @@ def criar_pesagem():
 
     nova_pesagem = Pesagem(
 
-        ticket=novo_ticket,
+        ticket=ticket,
 
         # Cliente
         cliente=cliente,
@@ -322,6 +384,7 @@ def criar_pesagem():
         tara=tara,
         peso_bruto=peso_bruto,
         peso_liquido=peso_liquido,
+        data=data_pesagem,
 
         # NF-e
         nfe=nfe
@@ -536,14 +599,16 @@ def imprimir_pesagem(id):
 # INICIAR SERVIDOR
 # =========================================
 
+def abrir_navegador():
+    webbrowser.open("http://127.0.0.1:5000")
+
+
 if __name__ == "__main__":
 
+    threading.Timer(1.5, abrir_navegador).start()
+
     app.run(
-
-        debug=True,
-
+        debug=False,
         host="127.0.0.1",
-
         port=5000
-
     )

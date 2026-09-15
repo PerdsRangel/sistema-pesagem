@@ -9,6 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const clienteInput =
         document.getElementById("cliente");
 
+    const ticketInput =
+        document.getElementById("ticket");
+
+    const horarioInput =
+        document.getElementById("horario");
+
     const transportadoraInput =
         document.getElementById("transportadora");
 
@@ -251,6 +257,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+    function preencherHorarioAtual() {
+
+        const agora = new Date();
+
+        const horas =
+            String(agora.getHours()).padStart(2, "0");
+
+        const minutos =
+            String(agora.getMinutes()).padStart(2, "0");
+
+        horarioInput.value =
+            `${horas}:${minutos}`;
+    }
 
     // =========================================
     // CADASTRAR CLIENTE
@@ -583,6 +602,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const dados = {
 
+                ticket:
+                    parseInt(ticketInput.value),
+
+                horario:
+                    horarioInput.value,
+
                 cliente:
                     clienteSelecionado.dataset.nome,
 
@@ -740,7 +765,8 @@ document.addEventListener("DOMContentLoaded", () => {
         () => {
 
             form.reset();
-
+            ticketInput.value = "";
+            preencherHorarioAtual();
 
             transportadoraInput.value = "";
             placaInput.value = "";
@@ -1035,6 +1061,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
             pesagemSelecionada =
                 pesagem;
+            
+            // =================================
+            // TICKET E HORÁRIO
+            // =================================
+
+            ticketInput.value =
+                pesagem.ticket || "";
+
+            if (pesagem.data) {
+            
+                const partes =
+                    pesagem.data.split(" ");
+            
+                if (partes.length >= 2) {
+                
+                    horarioInput.value =
+                        partes[1].substring(0, 5);
+                
+                }
+            
+            }
 
 
             // =================================
@@ -1269,5 +1316,7 @@ document.addEventListener("DOMContentLoaded", () => {
     carregarClientes();
 
     carregarPesagens();
+
+    preencherHorarioAtual();
 
 });
